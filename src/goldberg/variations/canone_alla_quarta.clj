@@ -172,6 +172,19 @@
          [(+ 45 3/4) -11] sharp}]
     (merge bass leader follower)))
 
+(def accidentals2 
+  (let [leader
+        {[(+ 5 1/2) -8] flat, [(+ 6 3/4) -8] flat, [(+ 7 1/4) -10] sharp, [9 -10] sharp, [(+ 9 3/4) -11] sharp
+         [(+ 15 3/4) -3] sharp, [(+ 17 1/2) -3] flat, [(+ 17 3/4) -4] sharp, [18 -3] sharp
+         [(+ 21 1/2) -3] sharp, [(+ 22 1/4) -3] flat, [(+ 22 1/2) -4] sharp, [(+ 22 3/4) -4] flat}
+        follower
+        {[(+ 9 1/2) 5] sharp, [(+ 11 1/2) -4] sharp, [(+ 11 3/4) -3] sharp, [(+ 25 1/2) 0] sharp,
+         [(+ 27 1/2) 0] sharp, [(+ 28 1/4) -1] flat, [31 -2] flat}
+        bass 
+        {[(+ 19 1/2) -10] sharp, [(+ 11 1/2) -11] sharp, [(+ 20 1/2) -12] sharp, [(+ 22 3/4) -10] sharp
+         [(+ 23 1/2) -10] flat, [(+ 29 3/4) -14] sharp, [(+ 33 3/4) -11] sharp, [(+ 34 1/4) -11] flat,
+         [(+ 37 3/4) -10] sharp}]
+    (merge leader follower bass)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Arrangement                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -191,14 +204,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def piece 
-  (->> (with
-         (canone-alla-quarta #(drop-last 6 %) melody1) 
-         bass1) 
-       (then
-         (with
-           (canone-alla-quarta #(drop-last 4 %) melody2)
-           bass2)) 
-       (with-accidentals accidentals1)
+  (->> (->> melody1
+            (canone-alla-quarta #(drop-last 6 %)) 
+            (with bass1)
+            (with-accidentals accidentals1)
+            (times 2)) 
+       (then (->> melody2
+                  (canone-alla-quarta #(drop-last 4 %))
+                  (with bass2)
+                  (with-accidentals accidentals2))) 
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
        (where :duration (bpm 90)))) 
