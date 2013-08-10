@@ -23,16 +23,8 @@
 (def runs (partial mapcat run))
 (def triples (partial mapcat #(repeat 3 %)))
 
-(defn => [value & fs] (reduce #(%2 %1) value fs)) 
-(defn insert [value n values] (concat (take n values) [value] (drop n values)))
-(defn subtract [n values] (concat (take n values) (drop (inc n) values)))
-(defn override [value n values] (concat (take n values) [value] (drop (inc n) values)))
-(defn minus [n] (partial subtract n))
-(defn plus [value n] (partial insert value n))
-(defn push [value n] (partial override value n))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Melody                                       ;;
+;; Part I                                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def melody1 
@@ -47,19 +39,19 @@
         development
         (phrase
           (repeats [[1 1] [11 1/4] [1 1/2] [1 1] [1 3/4]
-                    [11 1/4] [1 3]])
+                    [11 1/4] [1 13/4]])
           (runs [[4] [2 -3] [-1 -2] [0] [3 5] [1] [1 2]
                  [-1 1 -1] [5 0]]))
         interlude 
-        (phrase (=> (repeat 15 1/4) (plus 10/4 15)) 
-                (=> (run [-1 6 -3]) (minus 6)))
+        (phrase (repeats [[15 1/4] [1 10/4]]) 
+                (runs [[-1 5] [6 -3]]))
         buildup 
         (phrase
-          (repeats [[1 3/4] [7 1/4] [1 1/2] [2 1/4] [1 5/4] [11 1/4] [1 6/4] [5 1/2]])
+          (repeats [[1 3/4] [7 1/4] [1 1/2] [2 1/4] [1 5/4] [11 1/4] [1 6/4] [4 1/2]])
           (runs [[3 1 7] [0 -1 0] [2 -2 0 -1] [1 -2] [4 1]])) 
         finale
         (phrase
-          (repeats [[1 6/4] [1 1/2] [2 1/4] [1 1] [3 1/4] [1 1/2] [1 1/4] [1 1]])             
+          (repeats [[1 1/2] [1 6/4] [1 1/2] [2 1/4] [1 1] [3 1/4] [1 1/2] [1 1/4] [1 1]])             
           (runs [[6] [0 -2] [1 -2 -1] [4 3 4]]))]
     (->> (after 1/2 call)
          (then response)
@@ -69,10 +61,41 @@
          (then finale)
          (where :part (is :dux)))))
 
+(def bass1
+  (let [crotchets-a
+        (phrase (repeat 9 1)
+                (triples (run [-7 -9]))) 
+        twiddle 
+        (phrase (repeats [[1 1/4] [1 5/4] [2 1/4] [2 1/2]])
+                (runs [[-10] [-17] [-11 -13] [-11]])) 
+        crotchets-b
+        (phrase
+          (repeat 9 1)
+          (triples (run [-12 -10]))) 
+        elaboration
+        (phrase
+          (repeats [[1 3/4] [9 1/4] [1 1/2] [1 1] [2 1/4] [3 1/2] [1 1]])
+          (runs [[-7] [-12] [-9 -11] [-9 -13 -12] [-14] [-7 -8 -7] [-9 -8] [-5]])) 
+        busy 
+        (phrase
+          (repeats [[2 1/4] [2 1/2] [4 1/4] [4 1/2] [4 1/4] [3 1/2] [1 7/4]])
+          (runs [[-12 -10] [-12] [-9 -7 -9 -8 -11 -9 -11] [-9] [-11] [-13]])) 
+        finale 
+        (phrase
+          (repeats [[7 1/4] [1 1/2] [1 3/4] [23 1/4] [2 1/2] [1 1]])
+          (runs [[-10 -6 -8 -7] [-14] [-9 -6] [-8 -10] [-5] [-12] [-9 -11] [-13]
+                 [-10] [-7 -6] [-9] [-11] [-13] [-10 -9 -11 -10] [-13] [-17]]))] 
+    (->> crotchets-a (then twiddle) (then crotchets-b) (then elaboration) (then busy) (then finale)
+         (where :part (is :bass)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Part II                                      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (def melody2
   (let [theme
-        (phrase (=> (repeats [[2 1/4] [1 1/2] [6 1/4] [1 5/4] [5 1/4] [1 1/2] [1 3/4] [3 1/4] [1 1/2] [1 1]]))
-                (=> (runs [[-3 -2 -6 -3] [-10 -9] [-11 -9 -10] [-8 -9 -8 -10 -9] [-4]])))
+        (phrase (repeats [[2 1/4] [1 1/2] [6 1/4] [1 5/4] [5 1/4] [1 1/2] [1 3/4] [3 1/4] [1 1/2] [1 1]])
+                (runs [[-3 -2 -6 -3] [-10 -9] [-11 -9 -10] [-8 -9 -8 -10 -9] [-4]]))
         response
         (phrase (repeats [[1 1/2] [12 1/4]])
                 (runs [[-9 -10 -9 -11 -2]]))
@@ -90,59 +113,35 @@
                 (runs [[-7] [-5 -12] [-10] [-7] [-5] [-3] [-7 -6] [-8 -7]]))] 
     (->> (after 1/2 theme) (then response) (then complicated) (then thence) (then blah) (then finale))))
 
-(def bass1
-  (let [crotchets-a
-        (phrase (repeat 9 1)
-                (=> (run [-7 -9]) triples)) 
-        twiddle 
-        (phrase (repeats [[1 1/4] [1 5/4] [2 1/4] [2 1/2]])
-                (runs [[-10] [-17] [-11 -13] [-11]])) 
-        crotchets-b
-        (phrase
-          (repeat 9 1)
-          (=> (run [-12 -10]) triples)) 
-        elaboration
-        (phrase
-          (repeats [[1 3/4] [9 1/4] [1 1/2] [1 1] [2 1/4] [3 1/2] [1 1]])
-          (runs [[-7] [-12] [-9 -11] [-9 -13 -12] [-14] [-7 -8 -7] [-9 -8] [-5]])) 
-        busy 
-        (phrase
-          (repeats [[2 1/4] [2 1/2] [4 1/4] [4 1/2] [4 1/4] [3 1/2] [1 7/4]])
-          (runs [[-12 -10] [-12] [-9 -7 -9 -8 -11 -9 -11] [-9] [-11] [-13]])) 
-        finale 
-        (phrase
-          (repeats [[7 1/4] [1 1/2] [1 3/4] [23 1/4] [2 1/2] [1 3/4]])
-          (runs [[-10 -6 -8 -7] [-14] [-9 -6] [-8 -10] [-5] [-12] [-9 -11] [-13]
-                 [-10] [-7 -6] [-9] [-11] [-13] [-10 -9 -11 -10] [-13] [-17]]))] 
-    (->> crotchets-a (then twiddle) (then crotchets-b) (then elaboration) (then busy) (then finale)
-         (where :part (is :bass)))))
-
 (def bass2
   (let [intro
         (phrase (repeats [[3 1] [5 1/2] [2 1/4] [1 1/2] [1 1] [4 1/2] [1 7/2]])
-         (runs [[-10] [-10 -12 -11 -14 -11 -12 -11] [-9] [-13] [-11 -12]])) 
+                (runs [[-10] [-10 -12 -11 -14 -11 -12 -11] [-9] [-13] [-11 -12]])) 
         development 
         (phrase (repeats [[5 1/2] [24 1/4]])
-         (runs [[-9 -3 -5 -4 -7 -6] [-8 -4 -6 -5] [-8] [-10] [-8] [-12] [-10 -12]]))
+                (runs [[-9 -3 -5 -4 -7 -6] [-8 -4 -6 -5] [-8] [-10] [-8] [-12] [-10 -12]]))
         up-n-down 
         (phrase (repeats [[8 1/4] [3 1/2] [1 3/4] [7 1/4] [1 1/2] [1 3/4] [7 1/4] [1 1/2] [1 3/4]])
-         (runs [[-9] [-11 -14] [-12] [-9 -10 -9 -11] [-4] [-9 -11 -10 -13 -12] [-5] [-10 -12 -11 -14 -13] [-6]]))
+                (runs [[-9] [-11 -14] [-12] [-9 -10 -9 -11] [-4] [-9 -11 -10 -13 -12] [-5] [-10 -12 -11 -14 -13] [-6]]))
         down 
         (phrase (repeats [[27 1/4] [1 5/4] [3 1/4] [1 3/2]])
-         (runs [[-5 -7 -6 -9 -8 -11 -10 -13 -12 -15 -14] [-6 -8 -7 -10 -9 -11] [-9 -10]])) 
+                (runs [[-5 -7 -6 -9 -8 -11 -10 -13 -12 -15 -14] [-6 -8 -7 -10 -9 -11] [-9 -10]])) 
         finale 
         (phrase (repeats [[1 2] [3 1/2] [1 5/4] [3 1/4] [1 1]])
-         (runs [[-13] [-9] [-11 -10] [-14] [-12] [-10] [-8 -7]]))] 
-        (->> intro (then development) (then up-n-down) (then down) (then finale))
-    ))
+                (runs [[-13] [-9] [-11 -10] [-14] [-12] [-10] [-8 -7]]))] 
+    (->> intro (then development) (then up-n-down) (then down) (then finale))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Canone alla quarta - Johann Sebastian Bach   ;;
+;; Canon                                        ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn canone-alla-quarta [f notes]
   (canon
-    (comp (interval -3) mirror (simple 3)
-          (partial where :part (is :comes)) f)
+    (comp (interval -3)
+          mirror
+          (simple 3)
+          (partial where :part (is :comes))
+          f)
     notes))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
