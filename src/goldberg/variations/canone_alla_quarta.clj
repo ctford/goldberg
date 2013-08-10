@@ -88,7 +88,7 @@
         finale 
         (phrase (repeats [[1 5/4] [11 1/4] [1 1/2] [1 3/4] [1 1/4] [1 1/2] [1 1]])
                 (runs [[-7] [-5 -12] [-10] [-7] [-5] [-3] [-7 -6] [-8 -7]]))] 
-    (->> theme (then response) (then complicated) (then thence) (then blah) (then finale))))
+    (->> (after 1/2 theme) (then response) (then complicated) (then thence) (then blah) (then finale))))
 
 (def bass1
   (let [crotchets-a
@@ -166,7 +166,8 @@
 (def piece 
   (->> (canone-alla-quarta #(drop-last 6 %) melody1)
        (with bass1) 
-       (then (with (canone-alla-quarta #(drop-last 4 %) melody2)
+       (then (with
+               (canone-alla-quarta #(drop-last 4 %) melody2)
                bass2)) 
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
