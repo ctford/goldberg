@@ -189,7 +189,7 @@
 ;; Arrangement                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(defmethod play-note :default [{midi :pitch}] (-> midi midi->hz harpsichord))
+(defmethod play-note :default [{midi :pitch}] (-> midi midi->hz harpsichord))
 
 ; Warning: Using the sampled-piano will download and cache 200MB of samples
 (comment
