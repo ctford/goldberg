@@ -101,7 +101,7 @@
                 (runs [[-9 -10 -9 -11 -2]]))
         complicated 
         (phrase (repeats [[1 7/2] [2 1/4] [3 1/2] [2 1/4] [1 2]])
-                (runs [[-2 -3 -2] [-2] [-2 -4 -3]]))
+                (runs [[-2 -3 -2 -3 -2] [-2] [-2 -4 -3]]))
         thence 
         (phrase (repeats [[1 5/4] [11 1/4] [1 13/4]])
                 (runs [[-1 -3] [-1 -4] [-4 -8 -7]]))
@@ -109,9 +109,9 @@
         (phrase (repeats [[11 1/4] [1 7/2] [3 1/2] [4 1/4] [4 1/2] [1 3/4] [1 1/4]])
                 (runs [[1 -1 0 -3 -2 -5 -4] [0 -3] [-5 -4] [-6 -4 -8]])) 
         finale 
-        (phrase (repeats [[1 5/4] [11 1/4] [1 1/2] [1 3/4] [1 1/4] [1 1/2] [1 1]])
+        (phrase (repeats [[1 5/4] [11 1/4] [1 1/2] [1 3/4] [1 1/4] [1 1/2] [1 3]])
                 (runs [[-7] [-5 -12] [-10] [-7] [-5] [-3] [-7 -6] [-8 -7]]))] 
-    (->> (after 1/2 theme) (then response) (then complicated) (then thence) (then blah) (then finale))))
+    (->> (after 1/2 theme) (then response) (then complicated) (then thence) (then blah) (then finale) (where :part (is :dux)))))
 
 (def bass2
   (let [intro
@@ -129,7 +129,8 @@
         finale 
         (phrase (repeats [[1 2] [3 1/2] [1 5/4] [3 1/4] [1 1]])
                 (runs [[-13] [-9] [-11 -10] [-14] [-12] [-10] [-8 -7]]))] 
-    (->> intro (then development) (then up-n-down) (then down) (then finale))))
+    (->> intro (then development) (then up-n-down) (then down) (then finale)
+         (where :part (is :bass)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Canon                                        ;;
@@ -163,11 +164,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def piece 
-  (->> (canone-alla-quarta #(drop-last 6 %) melody1)
-       (with bass1) 
-       (then (with
+  (->>; (canone-alla-quarta #(drop-last 6 %) melody1)
+      ; (with bass1) 
+      ; (then
+         (with
                (canone-alla-quarta #(drop-last 4 %) melody2)
-               bass2)) 
+               bass2)
+       ;  ) 
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
        (where :duration (bpm 90)))) 
