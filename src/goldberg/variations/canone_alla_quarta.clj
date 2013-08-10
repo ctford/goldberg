@@ -155,8 +155,8 @@
 (defn with-accidentals [accidentals notes]
   (map
     (fn [{p :pitch t :time :as note}]
-      (if (contains? accidentals [t p])
-        (update-in note [:pitch] (accidentals1 [t p]))
+      (if (accidentals [t p])
+        (update-in note [:pitch] (accidentals [t p]))
         note))
     notes))
 
@@ -185,6 +185,7 @@
          [(+ 23 1/2) -10] flat, [(+ 29 3/4) -14] sharp, [(+ 33 3/4) -11] sharp, [(+ 34 1/4) -11] flat,
          [(+ 37 3/4) -10] sharp}]
     (merge leader follower bass)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Arrangement                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -204,12 +205,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def piece 
-  (->> (->> melody1
+  (->>
+    (->> melody1
             (canone-alla-quarta #(drop-last 6 %)) 
             (with bass1)
             (with-accidentals accidentals1)
             (times 2)) 
-       (then (->> melody2
+       (then
+         (->> melody2
                   (canone-alla-quarta #(drop-last 4 %))
                   (with bass2)
                   (with-accidentals accidentals2))) 
