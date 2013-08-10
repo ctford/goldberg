@@ -60,16 +60,14 @@
         finale
         (phrase
           (repeats [[1 6/4] [1 1/2] [2 1/4] [1 1] [3 1/4] [1 1/2] [1 1/4] [1 1]])             
-          (runs [[6] [0 -2] [1 -2 -1] [4 3 4]])) 
-        ]
+          (runs [[6] [0 -2] [1 -2 -1] [4 3 4]]))]
     (->> (after 1/2 call)
          (then response)
          (then development)
          (then interlude)
          (then buildup)
          (then finale)
-         (where :part (is :dux))
-         )))
+         (where :part (is :dux)))))
 
 (def bass1
   (let [crotchets-a
@@ -102,9 +100,10 @@
 ;; Canone alla quarta - Johann Sebastian Bach   ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn canone-alla-quarta [notes]
+(defn canone-alla-quarta [f notes]
   (canon
-    (comp (interval -3) mirror (simple 3) (partial where :part (is :comes)))
+    (comp (interval -3) mirror (simple 3)
+          (partial where :part (is :comes)) f)
     notes))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -127,7 +126,7 @@
 
 (def piece 
   (->> melody1
-       canone-alla-quarta
+       (canone-alla-quarta #(drop-last 6 %))
        (with bass1) 
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
