@@ -28,7 +28,7 @@
 ;; Melody                                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn note [timing pitch] {:time timing :pitch pitch}) 
+(defn note [timing pitch duration] {:time timing :pitch pitch :duration duration}) 
 (defn sum-n [series n] (reduce + (take n series)))
 (defn accumulate [series] (map (partial sum-n series) (range (count series))))
 (def repeats (partial mapcat #(apply repeat %)))
@@ -49,15 +49,17 @@
         [durations pitches]
                   (map concat call response development)
                 times (map (from 1/2) (accumulate durations))]
-              (map note times pitches)))
+              (map note times pitches durations)))
 
 (def bass
-  (let [triples (partial mapcat #(repeat 3 %))]
+  (let [triples (partial mapcat #(repeat 3 %))
+        durations (repeats [[21 1] [13 1/4]])]
     (map note
-      (accumulate (repeats [[21 1] [13 1/4]]))
-      (concat
-        (triples (runs [[-7 -10] [-12 -10]]))
-        (runs [[5 0] [6 0]])))))
+         (accumulate durations)
+         (concat
+           (triples (runs [[-7 -10] [-12 -10]]))
+           (runs [[5 0] [6 0]]))
+         durations)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Canone alla quarta - Johann Sebastian Bach   ;;
@@ -91,7 +93,7 @@
        (with bass) 
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
-       (where :duration (is 500)))) 
+       (where :duration (bpm 90)))) 
 
 (comment
   (play piece)
