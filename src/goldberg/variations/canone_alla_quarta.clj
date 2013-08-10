@@ -34,7 +34,7 @@
 (def repeats (partial mapcat #(apply repeat %)))
 (def runs (partial mapcat run))
 
-(def melody1 
+(def melody 
   (let [call
          [(repeats [[2 1/4] [1 1/2] [14 1/4] [1 3/2]])
           (runs [[0 -1 3 0] [4] [1 8]])]
@@ -51,7 +51,7 @@
                 times (map (from 1/2) (accumulate durations))]
               (map note times pitches)))
 
-(def bass1
+(def bass
   (let [triples (partial mapcat #(repeat 3 %))]
     (map note
       (accumulate (repeats [[21 1] [13 1/4]]))
@@ -84,13 +84,15 @@
 ;; Play                                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(comment
-  (->> melody1
+
+(def piece 
+  (->> melody
        canone-alla-quarta
-       (with bass1) 
+       (with bass) 
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
-       (where :duration (is 500)) 
-       play)
+       (where :duration (is 500)))) 
 
+(comment
+  (play piece)
 )
