@@ -23,30 +23,80 @@
 (def runs (partial mapcat run))
 (def triples (partial mapcat #(repeat 3 %)))
 
+(defn => [value & fs] (reduce #(%2 %1) value fs)) 
+(defn insert [value n values] (concat (take n values) [value] (drop n values)))
+(defn subtract [n values] (concat (take n values) (drop (inc n) values)))
+(defn override [value n values] (concat (take n values) [value] (drop (inc n) values)))
+(defn minus [n] (partial subtract n))
+(defn plus [value n] (partial insert value n))
+(defn push [value n] (partial override value n))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Melody                                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def melody1 
-  (let [call        (phrase
-                      (repeats [[2 1/4] [1 1/2] [14 1/4] [1 3/2]]) 
-                      (runs [[0 -1 3 0] [4] [1 8]])) 
-        response    (phrase
-                      (repeats [[10 1/4] [1 1/2] [2 1/4] [1 9/4]]) 
-                      (runs [[7 -1 0] [0 -3]])) 
-        development (phrase
-                      (repeats [[1 3/4] [12 1/4] [1 1/2] [1 1] [1 1/2]
-                                [12 1/4] [1 3]])
-                      (runs [[4] [4] [2 -3] [-1 -2] [0] [3 5] [1] [1] [1 2]
-                             [-1 1 -1] [5 0]]))]
-        (->> (after 1/2 call) (then response) (then development))))
+  (let [call
+        (phrase
+          (repeats [[2 1/4] [1 1/2] [14 1/4] [1 3/2]]) 
+          (runs [[0 -1 3 0] [4] [1 8]])) 
+        response
+        (phrase
+          (repeats [[10 1/4] [1 1/2] [2 1/4] [1 9/4]]) 
+          (runs [[7 -1 0] [0 -3]])) 
+        development
+        (phrase
+          (repeats [[1 3/4] [12 1/4] [1 1/2] [1 1] [1 1/2]
+                    [12 1/4] [1 3]])
+          (runs [[4] [4] [2 -3] [-1 -2] [0] [3 5] [1] [1] [1 2]
+                 [-1 1 -1] [5 0]]))
+        interlude 
+        (phrase (=> (repeat 15 1/4) (plus 10/4 15)) 
+                (=> (run [-1 6 -3]) (minus 6)))
+        buildup 
+        (phrase
+          (repeats [[1 3/4] [7 1/4] [1 1/2] [2 1/4] [1 5/4] [11 1/4] [1 6/4] [5 1/2]])
+          (runs [[3 1 7] [0 -1 0] [2 -2 0 -1] [1 -2] [4 1]])) 
+        finale
+        (phrase
+          (repeats [[1 6/4] [1 1/2] [2 1/4] [1 1] [3 1/4] [1 1/2] [1 1/4] [1 1]])             
+          (runs [[6] [0 -2] [1 -2 -1] [4 3 4]])) 
+        ]
+    (->> (after 1/2 call)
+         (then response)
+         (then development)
+         (then interlude)
+         (then buildup)
+         (then finale)
+         (where :part (is :dux))
+         )))
 
 (def bass1
-  (phrase
-    (repeats [[21 1] [13 1/4]])
-    (concat
-      (triples (runs [[-7 -10] [-12 -10]]))
-      (runs [[5 0] [6 0]]))))
+  (let [crotchets-a
+        (phrase (repeat 9 1)
+                (=> (run [-7 -9]) triples)) 
+        twiddle 
+        (phrase (repeats [[1 1/4] [1 5/4] [2 1/4] [2 1/2]])
+                (runs [[-10] [-17] [-11 -13] [-11]])) 
+        crotchets-b
+        (phrase
+          (repeat 9 1)
+          (=> (run [-12 -10]) triples)) 
+        elaboration
+        (phrase
+          (repeats [[1 3/4] [9 1/4] [1 1/2] [1 1] [2 1/4] [3 1/2] [1 1]])
+          (runs [[-7] [-12] [-9 -11] [-9 -13 -12] [-14] [-7 -8 -7] [-9 -8] [-5]])) 
+        busy 
+        (phrase
+          (repeats [[2 1/4] [2 1/2] [4 1/4] [4 1/2] [4 1/4] [3 1/2] [1 7/4]])
+          (runs [[-12 -10] [-12] [-9 -7 -9 -8 -11 -9 -11] [-9] [-11] [-13]])) 
+        finale 
+        (phrase
+          (repeats [[7 1/4] [1 1/2] [1 3/4] [23 1/4] [2 1/2] [1 3/4]])
+          (runs [[-10 -6 -8 -7] [-14] [-9 -6] [-8 -10] [-5] [-12] [-9 -11] [-13]
+                 [-10] [-7 -6] [-9] [-11] [-13] [-10 -9 -11 -10] [-13] [-17]]))] 
+    (->> crotchets-a (then twiddle) (then crotchets-b) (then elaboration) (then busy) (then finale)
+         (where :part (is :bass)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Canone alla quarta - Johann Sebastian Bach   ;;
@@ -54,14 +104,14 @@
 
 (defn canone-alla-quarta [notes]
   (canon
-    (comp (interval -3) mirror (simple 3))
+    (comp (interval -3) mirror (simple 3) (partial where :part (is :comes)))
     notes))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Arrangement                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod play-note :default [{midi :pitch}] (-> midi midi->hz harpsichord))
+;(defmethod play-note :default [{midi :pitch}] (-> midi midi->hz harpsichord))
 
 ; Warning: Using the sampled-piano will download and cache 200MB of samples
 (comment
