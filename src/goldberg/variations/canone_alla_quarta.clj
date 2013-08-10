@@ -164,13 +164,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def piece 
-  (->>; (canone-alla-quarta #(drop-last 6 %) melody1)
-      ; (with bass1) 
-      ; (then
+  (->> (canone-alla-quarta #(drop-last 6 %) melody1)
+       (with bass1) 
+       (then
          (with
-               (canone-alla-quarta #(drop-last 4 %) melody2)
-               bass2)
-       ;  ) 
+           (canone-alla-quarta #(drop-last 4 %) melody2)
+           bass2)) 
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
        (where :duration (bpm 90)))) 
