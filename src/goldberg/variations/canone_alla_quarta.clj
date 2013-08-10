@@ -5,7 +5,7 @@
     [leipzig.canon]
     [leipzig.live]
     [goldberg.instrument]
-    [overtone.live :only [midi->hz now stop at ctl]]))
+    [overtone.live :only [midi->hz now at ctl]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Abstractions                                 ;;
@@ -46,9 +46,9 @@
           (runs [[7 -1 0] [0 -3]])) 
         development
         (phrase
-          (repeats [[1 1] [11 1/4] [1 1/2] [1 1] [1 1/2]
-                    [12 1/4] [1 3]])
-          (runs [[4] [2 -3] [-1 -2] [0] [3 5] [1] [1] [1 2]
+          (repeats [[1 1] [11 1/4] [1 1/2] [1 1] [1 3/4]
+                    [11 1/4] [1 3]])
+          (runs [[4] [2 -3] [-1 -2] [0] [3 5] [1] [1 2]
                  [-1 1 -1] [5 0]]))
         interlude 
         (phrase (=> (repeat 15 1/4) (plus 10/4 15)) 
