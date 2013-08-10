@@ -1,6 +1,6 @@
 (ns goldberg.variations.canone-alla-quarta
   (:use
-    [leipzig.scale]
+    [leipzig.scale :exclude [flat sharp]]
     [leipzig.melody]
     [leipzig.canon]
     [leipzig.live]
@@ -146,6 +146,33 @@
     notes))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Accidentals                                  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def sharp (partial + 1/2))
+(def flat (partial + -1/2))
+
+(defn with-accidentals [accidentals notes]
+  (map
+    (fn [{p :pitch t :time :as note}]
+      (if (contains? accidentals [t p])
+        (update-in note [:pitch] (accidentals1 [t p]))
+        note))
+    notes))
+
+(def accidentals1 
+  (let [leader
+        {[(+ 3 3/4) 3] sharp, [(+ 7 1/2) 3] sharp, [14 -1] flat, [(+ 25 1/4) 3] sharp,
+         [(+ 30 1/2) 3] sharp, [40 3] sharp, [(+ 46 3/4) 3] sharp}
+        follower
+        {[(+ 27 3/4) -4] sharp, [30 -4] sharp, [(+ 34 1/2) -4] sharp, [(+ 38 1/2) -4] sharp,
+         [(+ 40 1/4) -4] sharp, [44 -4] sharp, [(+ 47 1/4) -4] sharp}
+        bass
+        {[8 -9] sharp, [(+ 28 3/4) -11] sharp, [33 -11] sharp, [43 -11] sharp,
+         [(+ 45 3/4) -11] sharp}]
+    (merge bass leader follower)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Arrangement                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -164,12 +191,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def piece 
-  (->> (canone-alla-quarta #(drop-last 6 %) melody1)
-       (with bass1) 
+  (->> (with
+         (canone-alla-quarta #(drop-last 6 %) melody1) 
+         bass1) 
        (then
          (with
            (canone-alla-quarta #(drop-last 4 %) melody2)
            bass2)) 
+       (with-accidentals accidentals1)
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
        (where :duration (bpm 90)))) 
