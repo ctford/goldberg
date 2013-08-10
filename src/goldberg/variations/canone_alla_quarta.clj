@@ -3,8 +3,9 @@
     [leipzig.scale]
     [leipzig.melody]
     [leipzig.canon]
+    [leipzig.live]
     [goldberg.instrument]
-    [overtone.live :only [midi->hz now stop]]))
+    [overtone.live :only [midi->hz now stop at ctl]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Abstractions                                 ;;
@@ -29,7 +30,6 @@
 
 (defn note [timing pitch] {:time timing :pitch pitch}) 
 (defn sum-n [series n] (reduce + (take n series)))
-(defn from [n] (partial + n))
 (defn accumulate [series] (map (partial sum-n series) (range (count series))))
 (def repeats (partial mapcat #(apply repeat %)))
 (def runs (partial mapcat run))
@@ -75,8 +75,10 @@
 (defmethod play-note :default [{midi :pitch}] (-> midi midi->hz harpsichord))
 
 ; Warning: Using the sampled-piano will download and cache 200MB of samples
-;(use 'overtone.inst.sampled-piano)
-;(defmethod play-note :default [{midi :pitch}] (sampled-piano midi))
+(use 'overtone.inst.sampled-piano)
+(defmethod play-note :default [{midi :pitch, start :time, duration :duration}]
+  (let [id (sampled-piano midi)]
+    (at (+ start duration) (ctl id :gate 0))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Play                                         ;;
@@ -84,9 +86,11 @@
 
 (comment
   (->> melody1
-    (with bass1) 
-    (where :pitch (comp G major))
-    (where :time (bpm 100)) 
-    play)
+       canone-alla-quarta
+       (with bass1) 
+       (where :pitch (comp G major))
+       (where :time (bpm 90)) 
+       (where :duration (is 500)) 
+       play)
 
 )
