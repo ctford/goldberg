@@ -162,27 +162,27 @@
 
 (def accidentals1 
   (let [leader
-        {[(+ 3 3/4) 3] sharp, [(+ 7 1/2) 3] sharp, [14 -1] flat, [(+ 25 1/4) 3] sharp,
-         [(+ 30 1/2) 3] sharp, [40 3] sharp, [(+ 46 3/4) 3] sharp}
+        {[(+ 3 3/4) 3] sharp, [(+ 7 1/2) 3] sharp, [14 -1] flat, [(+ 25 1/4) 3] sharp, [(+ 26 1/2)] sharp,
+         [(+ 30 1/2) 3] sharp, [32] sharp [40 3] sharp, [(+ 46 3/4) 3] sharp}
         follower
         {[(+ 27 3/4) -4] sharp, [30 -4] sharp, [(+ 34 1/2) -4] sharp, [(+ 38 1/2) -4] sharp,
          [(+ 40 1/4) -4] sharp, [44 -4] sharp, [(+ 47 1/4) -4] sharp}
         bass
-        {[8 -9] sharp, [(+ 28 3/4) -11] sharp, [33 -11] sharp, [43 -11] sharp,
-         [(+ 45 3/4) -11] sharp}]
+        {[8 -9] sharp, [(+ 28 3/4) -11] sharp, [33 -11] sharp, [34 -11] sharp, [35 -11] sharp,
+         [43 -11] sharp, [44 1/4] sharp, [(+ 45 3/4) -11] sharp}]
     (merge bass leader follower)))
 
 (def accidentals2 
   (let [leader
         {[(+ 5 1/2) -8] flat, [(+ 6 5/8) -8] flat, [(+ 6 7/8) -10] sharp, [9 -10] sharp, [(+ 9 3/4) -11] sharp
          [(+ 11 1/2) -4] sharp, [(+ 11 3/4) -3] sharp
-         [(+ 15 3/4) -3] sharp, [(+ 17 1/2) -3] flat, [(+ 17 3/4) -4] sharp, [18 -3] sharp
-         [(+ 21 1/2) -3] sharp, [(+ 22 1/4) -3] flat, [(+ 22 1/2) -4] sharp, [(+ 22 3/4) -4] flat}
+         [(+ 15 3/4) -3] sharp, [(+ 17 3/4) -4] sharp, [18 -3] sharp
+         [(+ 21 1/2) -3] sharp, [(+ 22 1/2) -4] sharp, [(+ 24 1/2) 0] sharp, [(+ 25 1/4) -1] flat}
         follower
         {[(+ 9 5/8) 5] sharp, [(+ 25 1/2) 1] flat, [(+ 31 1/4) -2] flat}
         bass 
         {[(+ 19 1/2) -10] sharp, [(+ 20 1/2) -11] sharp, [(+ 22 3/4) -10] sharp
-         [(+ 23 1/2) -10] flat, [(+ 29 3/4) -14] sharp, [(+ 33 3/4) -11] sharp, [(+ 34 1/4) -11] flat,
+         [(+ 29 3/4) -14] sharp, [(+ 33 3/4) -11] sharp,
          [(+ 37 3/4) -10] sharp}]
     (merge leader follower bass)))
 
@@ -227,8 +227,8 @@
        (filter #(-> % :time (< finish)))
        (where :time (from (- start)))
        (where :pitch (comp G major))
-       (where :time (bpm 80))
-       (where :duration (bpm 80))
+       (where :time (bpm 40))
+       (where :duration (bpm 40))
        play
        ))
 
