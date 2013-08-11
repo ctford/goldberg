@@ -94,7 +94,7 @@
 
 (def melody2
   (let [theme
-        (phrase (repeats [[2 1/4] [1 1/2] [6 1/4] [1 5/4] [5 1/4] [1 1/2] [1 3/4] [3 1/4] [1 1/2] [1 1]])
+        (phrase (repeats [[2 1/4] [1 1/2] [6 1/4] [1 5/4] [5 1/4] [1 1/2] [1 5/8] [3 1/8] [1 1/2] [1 1]])
                 (runs [[-3 -2 -6 -3] [-10 -9] [-11 -9 -10] [-8 -9 -8 -10 -9] [-4]]))
         response
         (phrase (repeats [[1 1/2] [12 1/4]])
@@ -219,6 +219,18 @@
        (where :pitch (comp G major))
        (where :time (bpm 90)) 
        (where :duration (bpm 90)))) 
+
+(defn demo
+  [start finish melody]
+  (->> melody
+       (filter #(-> % :time (>= start)))
+       (filter #(-> % :time (< finish)))
+       (where :time (from (- start)))
+       (where :pitch (comp G major))
+       (where :time (bpm 80))
+       (where :duration (bpm 80))
+       play
+       ))
 
 (comment
   (play piece)
