@@ -179,8 +179,7 @@
          [(+ 15 3/4) -3] sharp, [(+ 17 1/2) -3] flat, [(+ 17 3/4) -4] sharp, [18 -3] sharp
          [(+ 21 1/2) -3] sharp, [(+ 22 1/4) -3] flat, [(+ 22 1/2) -4] sharp, [(+ 22 3/4) -4] flat}
         follower
-        {[(+ 9 1/2) 5] sharp, [(+ 11 1/2) -4] sharp, [(+ 11 3/4) -3] sharp, [(+ 25 1/2) 0] sharp,
-         [(+ 27 1/2) 0] sharp, [(+ 28 1/4) -1] flat, [31 -2] flat}
+        {[(+ 9 5/8) 5] sharp, [(+ 25 1/2) 1] flat, [(+ 31 1/4) -2] flat}
         bass 
         {[(+ 19 1/2) -10] sharp, [(+ 20 1/2) -11] sharp, [(+ 22 3/4) -10] sharp
          [(+ 23 1/2) -10] flat, [(+ 29 3/4) -14] sharp, [(+ 33 3/4) -11] sharp, [(+ 34 1/4) -11] flat,
@@ -218,8 +217,8 @@
                   (with bass2)
                   (with-accidentals accidentals2))) 
        (where :pitch (comp G major))
-       (where :time (bpm 90)) 
-       (where :duration (bpm 90)))) 
+       (where :time (bpm 40)) 
+       (where :duration (bpm 40)))) 
 
 (defn demo
   [start finish melody]
