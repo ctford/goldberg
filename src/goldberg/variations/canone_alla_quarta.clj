@@ -174,7 +174,8 @@
 
 (def accidentals2 
   (let [leader
-        {[(+ 5 1/2) -8] flat, [(+ 6 3/4) -8] flat, [(+ 7 1/4) -10] sharp, [9 -10] sharp, [(+ 9 3/4) -11] sharp
+        {[(+ 5 1/2) -8] flat, [(+ 6 5/8) -8] flat, [(+ 6 7/8) -10] sharp, [9 -10] sharp, [(+ 9 3/4) -11] sharp
+         [(+ 11 1/2) -4] sharp, [(+ 11 3/4) -3] sharp
          [(+ 15 3/4) -3] sharp, [(+ 17 1/2) -3] flat, [(+ 17 3/4) -4] sharp, [18 -3] sharp
          [(+ 21 1/2) -3] sharp, [(+ 22 1/4) -3] flat, [(+ 22 1/2) -4] sharp, [(+ 22 3/4) -4] flat}
         follower
