@@ -217,8 +217,8 @@
                   (with bass2)
                   (with-accidentals accidentals2))) 
        (where :pitch (comp G major))
-       (where :time (bpm 40)) 
-       (where :duration (bpm 40)))) 
+       (where :time (bpm 90)) 
+       (where :duration (bpm 90)))) 
 
 (defn demo
   [start finish melody]
