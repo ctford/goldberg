@@ -162,8 +162,9 @@
 
 (def accidentals1 
   (let [leader
-        {[(+ 3 3/4) 3] sharp, [(+ 7 1/2) 3] sharp, [14 -1] flat, [(+ 25 1/4) 3] sharp, [(+ 26 1/2)] sharp,
-         [(+ 30 1/2) 3] sharp, [32] sharp [40 3] sharp, [(+ 46 3/4) 3] sharp}
+        {[(+ 3 3/4) 3] sharp, [(+ 7 1/2) 3] sharp, [14 -1] flat, [(+ 14 3/4)] flat,
+         [(+ 25 1/4) 3] sharp, [(+ 26 1/2)] sharp,
+         [(+ 30 1/2) 3] sharp, [32 3] sharp [40 3] sharp, [(+ 46 3/4) 3] sharp}
         follower
         {[(+ 27 3/4) -4] sharp, [30 -4] sharp, [(+ 34 1/2) -4] sharp, [(+ 38 1/2) -4] sharp,
          [(+ 40 1/4) -4] sharp, [44 -4] sharp, [(+ 47 1/4) -4] sharp}
@@ -174,14 +175,17 @@
 
 (def accidentals2 
   (let [leader
-        {[(+ 5 1/2) -8] flat, [(+ 6 5/8) -8] flat, [(+ 6 7/8) -10] sharp, [9 -10] sharp, [(+ 9 3/4) -11] sharp
+        {[(+ 5 1/2) -8] flat, [(+ 6 5/8) -8] flat, [(+ 6 7/8) -10] sharp, [9 -10] sharp,
+         [(+ 9 1/2) -10] sharp, [(+ 9 3/4) -11] sharp, [10 -10] sharp,
          [(+ 11 1/2) -4] sharp, [(+ 11 3/4) -3] sharp
          [(+ 15 3/4) -3] sharp, [(+ 17 3/4) -4] sharp, [18 -3] sharp
-         [(+ 21 1/2) -3] sharp, [(+ 22 1/2) -4] sharp, [(+ 24 1/2) 0] sharp, [(+ 25 1/4) -1] flat}
+         [(+ 21 1/2) -3] sharp, [(+ 22 1/2) -4] sharp, [(+ 24 1/2) 0] sharp, [(+ 25 1/4) -1] flat
+         [(+ 27 1/2) 0] sharp, [28 0] sharp, [(+ 28 1/4) -1] flat
+         }
         follower
         {[(+ 9 5/8) 5] sharp, [(+ 25 1/2) 1] flat, [(+ 31 1/4) -2] flat}
         bass 
-        {[(+ 19 1/2) -10] sharp, [(+ 20 1/2) -11] sharp, [(+ 22 3/4) -10] sharp
+        {[(+ 19 1/2) -10] sharp, [(+ 20 1/4)] -10, [(+ 20 1/2) -11] sharp, [(+ 22 3/4) -10] sharp
          [(+ 29 3/4) -14] sharp, [(+ 33 3/4) -11] sharp,
          [(+ 37 3/4) -10] sharp}]
     (merge leader follower bass)))
