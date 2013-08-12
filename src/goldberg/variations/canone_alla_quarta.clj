@@ -166,10 +166,10 @@
          [(+ 25 1/4) 3] sharp, [(+ 26 1/2)] sharp,
          [(+ 30 1/2) 3] sharp, [32 3] sharp [40 3] sharp, [(+ 46 3/4) 3] sharp}
         follower
-        {[(+ 27 3/4) -4] sharp, [30 -4] sharp, [(+ 34 1/2) -4] sharp, [(+ 38 1/2) -4] sharp,
+        {[8 -11] sharp, [(+ 27 3/4) -4] sharp, [30 -4] sharp, [(+ 34 1/2) -4] sharp, [(+ 38 1/2) -4] sharp,
          [(+ 40 1/4) -4] sharp, [44 -4] sharp, [(+ 47 1/4) -4] sharp}
         bass
-        {[8 -9] sharp, [(+ 28 3/4) -11] sharp, [33 -11] sharp, [34 -11] sharp, [35 -11] sharp,
+        {[(+ 28 3/4) -11] sharp, [33 -11] sharp, [34 -11] sharp, [35 -11] sharp,
          [43 -11] sharp, [44 1/4] sharp, [(+ 45 3/4) -11] sharp}]
     (merge bass leader follower)))
 
